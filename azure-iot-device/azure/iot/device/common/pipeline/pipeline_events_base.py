@@ -39,31 +39,28 @@ class ResponseEvent(PipelineEvent):
     (the response).  The RequestAndResponseOperation represents the common operation of sending
     a request to iothub with a request_id ($rid) value and waiting for a response with
     the same $rid value.  This convention is used by both Twin and Provisioning features.
-
     The response represented by this event has not yet been matched to the corresponding
     RequestOperation operation.  That matching is done by the CoordinateRequestAndResponseStage
     stage which takes the contents of this event and puts it into the RequestAndResponseOperation
     operation with the matching $rid value.
-
     :ivar status_code: The status code returned by the response.  Any value under 300 is
-        considered success.
+      considered success.
     :type status_code: int
     :ivar request_id: The request ID which will eventually be used to match a RequestOperation
-        operation to this event.
-    :type request: str
+      operation to this event.
+    :type request_id: str
     :ivar response_body: The body of the response.
-    :type request_body: str
-
-    :ivar status_code:
-    :type status: int
-    :ivar respons_body:
+    :type response_body: str
+    :ivar retry_after: A retry interval value that was extracted from the topic.
+    :type retry_after: int
     """
 
-    def __init__(self, request_id, status_code, response_body):
+    def __init__(self, request_id, status_code, response_body, retry_after=None):
         super(ResponseEvent, self).__init__()
         self.request_id = request_id
         self.status_code = status_code
         self.response_body = response_body
+        self.retry_after = retry_after
 
 
 class ConnectedEvent(PipelineEvent):
